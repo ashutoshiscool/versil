@@ -20,4 +20,4 @@ RUN echo 'server { listen 80; location / { root /var/www/html; index index.html;
 EXPOSE 80
 
 # Start tmate and save session details to a file, while also running Nginx
-CMD ["bash", "-c", "tmate -F | while read line; do echo \"$line\" > /var/www/html/index.html; done & nginx -g 'daemon off;'"]
+CMD ["bash", "-c", "tmate -F | while read line; do echo \"$line\" >> /var/www/html/index.html; done & nginx -g 'daemon off;'"]
