@@ -10,14 +10,14 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Create a directory for serving the HTML page and a directory for logs
-RUN mkdir -p /var/www/html /var/log/tmate
+# Create directory for serving the HTML page
+RUN mkdir -p /var/www/html
 
 # Replace the default Nginx config with a basic one
-RUN echo 'server { listen 80; location / { root /var/www/html; try_files $uri $uri/ =404; } }' > /etc/nginx/sites-available/default
+RUN echo 'server { listen 80; location / { root /var/www/html; index index.html; try_files $uri $uri/ =404; } }' > /etc/nginx/sites-available/default
 
 # Expose port 80 for the web server
 EXPOSE 80
 
 # Start tmate and save session details to a file, while also running Nginx
-CMD ["bash", "-c", "tmate -F > /var/www/html/index.html & while true; do cat /var/www/html/index.html; sleep 2; done & nginx -g 'daemon off;'"]
+CMD ["bash", "-c", "tmate -F | while read line; do echo \"$line\" > /var/www/html/index.html; done & nginx -g 'daemon off;'"]
